@@ -82,48 +82,26 @@ def tracking_mean_shift(path_to_dataset, roi_range, hue_range = (0, 180), debug 
     term_crit = ( cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 1 )
     
     draw_first_back = debug
-
+    
     for filename in sorted(glob.glob(path_to_dataset + '/*.jpg')):
         frame = imread(filename)
-        ret = True
-        if ret == True:
-            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+        
+        prob_image = cv2.calcBackProject([hsv], [0], roi_hist, [start_hue, end_hue], 1)
 
-# images – Source arrays. They all should have the same depth, CV_8U or CV_32F , and the same size. 
-#          Each of them can have an arbitrary number of channels.
-# nimages – Number of source images.
-# channels – The list of channels used to compute the back projection. The number of channels must match the histogram dimensionality. 
-#            The first array channels are numerated from 0 to images[0].channels()-1 , 
-#            the second array channels are counted from images[0].channels() to images[0].channels() + images[1].channels()-1, and so on.
-# hist – Input histogram that can be dense or sparse.
-# backProject – Destination back projection array that is a single-channel array of the same size and depth as images[0] .
-# ranges – Array of arrays of the histogram bin boundaries in each dimension. See calcHist() .
-# scale – Optional scale factor for the output back projection.
-# uniform – Flag indicating whether the histogram is uniform or not (see above).
-            prob_image = cv2.calcBackProject([hsv], [0], roi_hist, [start_hue, end_hue], 1)
-    
-#             if draw_first_back == True :
-#                 print("Back ")
-#                 plt.plot(), plt.imshow(prob_image, 'gray')
-#                 plt.show()
-#                 draw_first_back = False
+        # apply meanshift to get the new location
+        ret, track_window = cv2.meanShift(prob_image, track_window, term_crit)
 
-            # apply meanshift to get the new location
-            ret, track_window = cv2.meanShift(prob_image, track_window, term_crit)
+        # Draw it on image
+        x,y,w,h = track_window
+        img2 = cv2.rectangle(frame, (x,y), (x+w,y+h), 255,2)
+        cv2.imshow('img2', img2)
 
-            # Draw it on image
-            x,y,w,h = track_window
-            img2 = cv2.rectangle(frame, (x,y), (x+w,y+h), 255,2)
-            cv2.imshow('img2', img2)
-
-            k = cv2.waitKey(60) & 0xff
-            if k == 27:
-                break
-            else:
-                cv2.imwrite(chr(k)+".jpg",img2)
-
-        else:
+        k = cv2.waitKey(60) & 0xff
+        if k == 27:
             break
+        else:
+            cv2.imwrite(chr(k)+".jpg",img2)
 
     cv2.destroyAllWindows()
     cv2.waitKey(1)
@@ -136,7 +114,7 @@ def main():
     	hue_range = tuple(map(int, sys.argv[3].split(',')))
 	
     print(path)
-    print(type(roi), roi, type(roi[0]), roi[0])
+    print(roi)
     print(hue_range)
     tracking_mean_shift(path, roi, hue_range)
 

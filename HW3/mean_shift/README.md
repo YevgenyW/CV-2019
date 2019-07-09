@@ -1,12 +1,13 @@
-# Object tracking with meanshift
+# Script to start object tracking with meanshift in general form
 ```python meanshift.py path_to_dataset roi hue_range```
-# Example:
-```python meanshift.py 'data/Basketball/img/' 198,214,34,81 50,70```
-# where 'data/Basketball/img/' - path to folder with images;
-# '198,214,34,81' - roi;
-# '50,70' - hue start and end (by default (0, 180)).
 
-Third parameter is used just for better results. I found the following value of this parameter for the following datasets:
+# Example:
+```python meanshift.py '../data/Basketball/img/' 198,214,34,81 50,70```
+# where '../data/Basketball/img/' - path to folder with images;
+# '198,214,34,81' - roi;
+# '50,70' - hue range (by default (0, 180)).
+
+Third parameter is used just for better results. I found the following optimal value of this parameter for the following datasets:
 'data/Basketball/img/' - (50, 70)
 'data/Biker/img/' - (90, 120)
 'data/BlurBody/img/' - (10, 30)
