@@ -19,6 +19,11 @@ Third parameter is used just for better results. I found the following optimal v
 ```python meanshift.py path_to_dataset roi hue_range```
 # where 'hue_range' - again optional parameter.
 
-In some cases when meanshift provides good results, camshift has worse results. But in general camshift adapts windows size.
+In general, meanshift can lose object if roi and background has similar color histogram or roi changes its position too quickly.
 
-Meanshift can lose object when object and background has the same color parameters. It's well seen on the example with 'Bird1' dataset. It's necessary to control histogram parameters in order to provide better results in this case (like I did with custom third parameter). But, such "custom control" doesn't work in general cases.
+'Basketball', 'Bird1' and 'BlurBody' datasets are the typical examples of the first reason.
+'Biker' and 'BlurBody' datasets - examples of the second reason.
+
+'Surfer' dataset has good result because roi object is contrast and doesn't change its location too quickly.
+
+First reason could be fixed by custom parameters of histogram parameters (like I did with custom third parameter). But, such "custom control" doesn't work for general cases.
