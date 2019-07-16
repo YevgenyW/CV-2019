@@ -15,6 +15,8 @@ Third parameter is used just for better results. I found the following optimal v
 'data/Bird1/img/' - (92, 97)
 'data/Surfer/img/' - (0, 255)
 
+I added two movies (Bird1 and Basketball) to show how algorithm works with custom parameters.
+
 # Object tracking with camshift
 ```python meanshift.py path_to_dataset roi hue_range```
 # where 'hue_range' - again optional parameter.
